@@ -60,7 +60,7 @@ def list_transactions(category: str = None, type: str = None):
             query += " AND type = ?"
             params.append(type)
 
-        query += "ORDER BY id DESC"
+        query += " ORDER BY id DESC"
 
         rows = conn.execute(query, params).fetchall()
         return [dict(row) for row in rows]
@@ -76,14 +76,14 @@ def update_transaction(transaction_id: int, transaction: TransactionIn):
     conn = get_connection()
     try:
         existing = conn.execute(
-            "SELECT id FROM transactionsn WHERE id =?", (transaction_id,)
+            "SELECT id FROM transactions WHERE id =?", (transaction_id,)
         ).fetchone()
         if not existing:
             raise HTTPException(status_code=404, detail="Transaction not found")
         conn.execute(
             """
             UPDATE transactions
-            SET type = ?, category = ?, amount = ?, description = ?, date = ?,
+            SET type = ?, category = ?, amount = ?, description = ?, date = ?
             WHERE id = ?
             """,
             (
@@ -116,7 +116,7 @@ def delete_transaction(transaction_id: int):
         if not existing:
             raise HTTPException(status_code=404, detail="Transaction not found")
         
-        conn.execute("DELETE FROM transaction WHERE id = ?", (transaction_id,))
+        conn.execute("DELETE FROM transactions WHERE id = ?", (transaction_id,))
         conn.commit()
         return {"message": "Transaction deleted"}
     except HTTPException:
