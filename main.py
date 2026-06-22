@@ -167,7 +167,7 @@ def get_summary():
         closing_balance = opening_balance + total_income - total_expense
 
         return {
-            "opening balance": opening_balance,
+            "opening_balance": opening_balance,
             "total_income": total_income,
             "total_expense": total_expense,
             "closing_balance": closing_balance,
